@@ -1,0 +1,32 @@
+/* ESTILOS BARRA DE NAVEGACIÓN */
+
+.nav {
+  grid-area: nav;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background-color: #110D0A;
+  opacity: 0.9;
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+}
+
+.nav li {
+  padding: 20px 20px;
+}
+
+.nav a {
+  font-size: 20px;
+  font-weight: lighter;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 300ms;
+}
+
+.nav a:hover {
+  transform: scale(1.1);
+}

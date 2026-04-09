@@ -1,0 +1,88 @@
+/* ESTILOS PELÍCULAS */
+
+.peliculas {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 40px;
+  padding: 40px;
+  overflow: visible;
+}
+
+.pelicula-item {
+  background: radial-gradient(
+    circle at top,
+    rgba(216, 76, 51, 0.15),
+    #110d0a 70%
+  );
+
+  aspect-ratio: 2 / 3;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.pelicula-item:hover {
+  z-index: 10;
+  transform: translateY(-10px) scale(1.06);
+  box-shadow:
+    0 25px 40px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(216, 76, 51, 0.6);
+}
+
+.pelicula-item h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.pelicula-item p {
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 2px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pelicula-item .edit:hover{
+  background: rgb(255, 255, 255);
+}
+
+.pelicula-item .delete:hover{
+  background: rgb(212, 76, 58);
+}
+
+@media (max-width: 1200px) {
+  .peliculas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .peliculas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .peliculas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1085px) {
+  .pelicula-item {
+    width: 80%;
+  }
+}
