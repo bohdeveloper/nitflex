@@ -1,75 +1,185 @@
-# React + TypeScript + Vite
+NITFLEX – GUÍA DE INSTALACIÓN Y USO
+=================================
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nitflex es una aplicación web tipo streaming que permite:
+- Registro y login de usuarios
+- Persistencia de sesión mediante token (JWT)
+- Consumo de la API pública de TMDB para mostrar películas y series
+- Interfaz tipo Netflix con React
+- Backend propio con Express y MongoDB
 
-Currently, two official plugins are available:
+──────────────────────────────────
+1. REQUISITOS PREVIOS
+──────────────────────────────────
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Antes de comenzar, asegúrate de tener instalado:
 
-## React Compiler
+- Node.js (versión 18 o superior)
+- npm (incluido con Node)
+- MongoDB Community Server (en local)
+- MongoDB Compass (opcional, para ver la base de datos)
+- Git
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+──────────────────────────────────
+2. DESCARGA DEL PROYECTO
+──────────────────────────────────
 
-Note: This will impact Vite dev & build performances.
+Clonar el repositorio desde Git:
 
-## Expanding the ESLint configuration
+git clone <URL_DEL_REPOSITORIO>
+cd nitflex
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+La estructura del proyecto es:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+nitflex/
+ ├── frontend/   → React + Vite + Tailwind
+ ├── backend/    → Express + MongoDB
+ └── package.json (orquestador para desarrollo)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+──────────────────────────────────
+3. CONFIGURACIÓN DEL BACKEND
+──────────────────────────────────
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Entrar en la carpeta backend:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+cd backend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Instalar dependencias:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm install
+
+Crear el archivo de variables de entorno:
+
+backend/.env
+
+Contenido recomendado:
+
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/nitflex
+JWT_SECRET=clave_secreta_para_jwt
+
+Asegúrate de que MongoDB esté ejecutándose como servicio local.
+
+──────────────────────────────────
+4. CONFIGURACIÓN DEL FRONTEND
+──────────────────────────────────
+
+Entrar en la carpeta frontend:
+
+cd ../frontend
+
+Instalar dependencias:
+
+npm install
+
+Crear el archivo de variables de entorno:
+
+frontend/.env
+
+Contenido recomendado:
+
+VITE_TMDB_API_KEY=TU_API_KEY_DE_TMDB
+VITE_TMDB_BASE_URL=https://api.themoviedb.org/3
+
+IMPORTANTE:
+- La API Key debe obtenerse desde https://www.themoviedb.org/
+- Las variables de Vite deben empezar por VITE_
+
+──────────────────────────────────
+5. ARRANQUE DE LA APLICACIÓN
+──────────────────────────────────
+
+Desde la carpeta raíz del proyecto:
+
+cd ..
+
+Instalar dependencias del orquestador (solo la primera vez):
+
+npm install
+
+Arrancar frontend y backend a la vez:
+
+npm run dev
+
+Esto arrancará:
+- Frontend en http://localhost:5173
+- Backend en http://localhost:5000
+
+──────────────────────────────────
+6. FUNCIONAMIENTO GENERAL
+──────────────────────────────────
+
+- Al acceder a la aplicación sin sesión:
+  - Se muestra la landing pública
+  - Opción de registro o login
+
+- Registro:
+  - Se crea un usuario en MongoDB
+  - Se genera un token JWT
+  - El token se guarda en localStorage
+  - Redirección automática al inicio
+
+- Login:
+  - Se validan credenciales
+  - Se genera y guarda el token
+  - Redirección al inicio autenticado
+
+- Sesión:
+  - Mientras exista el token, el usuario permanece autenticado
+  - El contenido cambia según el estado de sesión
+
+- Logout:
+  - Se elimina el token
+  - Se cierra el sidebar
+  - Se vuelve a la vista pública
+
+──────────────────────────────────
+7. BASE DE DATOS
+──────────────────────────────────
+
+- Base de datos: MongoDB
+- Nombre por defecto: nitflex
+- Colección principal: usuarios
+
+Cada usuario contiene:
+- Datos de cuenta (email, contraseña)
+- Información adicional del usuario
+- Perfiles (tipo Netflix)
+- Favoritos (IDs de TMDB)
+
+La base de datos puede visualizarse con MongoDB Compass.
+
+──────────────────────────────────
+8. TECNOLOGÍAS UTILIZADAS
+──────────────────────────────────
+
+Frontend:
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+
+Backend:
+- Node.js
+- Express
+- TypeScript
+- Mongoose
+- JWT
+- bcrypt
+
+API externa:
+- The Movie Database (TMDB)
+
+──────────────────────────────────
+9. NOTAS FINALES
+──────────────────────────────────
+
+- El proyecto está preparado para ampliaciones futuras:
+  - Perfiles por usuario
+  - Favoritos
+  - Control parental
+  - Historial de visualización
+
+- El token se gestiona desde frontend mediante Context API.
+- El backend expone una API REST para autenticación y usuario.
