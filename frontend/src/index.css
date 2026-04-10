@@ -26,13 +26,6 @@ a {
   text-decoration: none;
 }
 
-li:hover, a:hover {
-  color: rgb(216, 76, 51) !important;
-}
-
-.active {
-  color: rgb(216, 76, 51) !important;
-}
 
 
 

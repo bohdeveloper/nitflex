@@ -18,7 +18,7 @@
 .content {
   grid-area: content;
   background: #110D0A;
-  padding: 20px;
+  padding: 50px;
 }
 
 @media (max-width: 1085px) {

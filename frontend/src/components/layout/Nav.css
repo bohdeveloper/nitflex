@@ -30,3 +30,16 @@
 .nav a:hover {
   transform: scale(1.1);
 }
+
+nav-li:hover {
+  color: rgb(216, 76, 51) !important;
+}
+
+.login{
+  color: rgb(216, 76, 51) !important;
+  background-color: #fff !important;
+}
+
+.active {
+  color: rgb(216, 76, 51) !important;
+}

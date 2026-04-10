@@ -22,7 +22,7 @@ if "%ERRORLEVEL%"=="0" (
 :: 2. Iniciar Vite en otra ventana
 :: ------------------------------------------------------------
 echo Iniciando Vite Dev Server...
-start "Vite" cmd.exe /k "cd /d C:\Cursos\react\nitflex\v1.0.0 && npm run dev"
+start "Vite" cmd.exe /k "cd /d C:\Cursos\react\apps\nitflex && npm run dev"
 
 :: ------------------------------------------------------------
 :: 3. Iniciar MongoDB Compass si no esta abierto

@@ -9,13 +9,15 @@ const Nav: React.FC = () => {
     <nav>
       {token ? (
         <ul>
-          <li><NavLink to="/inicio">Inicio</NavLink></li>
-          <li><NavLink to="/series">Series</NavLink></li>  
-          <li><NavLink to="/peliculas">Peliculas</NavLink></li>
+          <li className='nav-li'><NavLink to="/inicio">Inicio</NavLink></li>
+          <li className='nav-li'><NavLink to="/series">Series</NavLink></li>  
+          <li className='nav-li'><NavLink to="/peliculas">Peliculas</NavLink></li>
         </ul>
       ) : (
-        <ul className='flex flex-col items-end'>
-          <li><NavLink to="/login">Iniciar sesíon</NavLink></li>
+        <ul className='flex items-center justify-end'>
+          <li>
+            <NavLink to="/login" className="login w-full bg-red-600 text-white p-3 rounded">Iniciar sesíon</NavLink>
+          </li>
         </ul>
       )}
     </nav>

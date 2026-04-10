@@ -40,7 +40,7 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4">
+    <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4 mt-20">
       <h1 className="text-xl font-bold">Iniciar sesión</h1>
 
       <input

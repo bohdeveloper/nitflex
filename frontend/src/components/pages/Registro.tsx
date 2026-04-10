@@ -44,7 +44,7 @@ export default function Registro() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4">
+    <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4 mt-20">
       <h1 className="text-xl font-bold">Registro</h1>
 
       <input

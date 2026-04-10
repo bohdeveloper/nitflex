@@ -10,7 +10,7 @@ const Inicio: React.FC = () => {
 return (
     <>
     {token ? (      
-      <div className="items-center max-w-[120vh] min-h-[50vh] text-center">
+      <div className="items-center mt-20 max-w-[120vh] min-h-[50vh] text-center">
         <h1 className="text-start font-bold text-8xl max-w-[60vh]">
            {usuario && <p>Hola, {usuario.nombreCompleto}</p>}
         </h1>
@@ -23,7 +23,7 @@ return (
         <p className="text-start"><NavLink className="text-red-800 hover:text-red-600 text-5xl" to="/peliculas"> Ver Películas</NavLink></p>                              
       </div>      
     ) : (
-      <div className="items-center max-w-[120vh] min-h-[50vh] text-center">
+      <div className="items-center mt-20 max-w-[120vh] min-h-[50vh] text-center">
         <h1 className="font-bold text-8xl">
           Películas y series en un mismo sitio
         </h1>

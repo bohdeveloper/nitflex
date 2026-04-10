@@ -41,7 +41,7 @@ const Plantilla: React.FC = () => {
               <Nav />
             </div>
 
-            <section id="content" className="content flex flex-col justify-center items-center min-h-[calc(90vh-90px)]">
+            <section id="content" className="content flex flex-col items-center min-h-[calc(90vh-90px)]">
               <Routes>
                 <Route path="/" element={<Inicio />} />
                 <Route path="/inicio" element={<Inicio />} />

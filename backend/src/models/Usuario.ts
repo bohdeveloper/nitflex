@@ -2,17 +2,13 @@ import { Schema, model } from "mongoose";
 
 const perfilSchema = new Schema(
   {
-    nombre: {
+    nombrePerfil: {
       type: String,
       required: true
     },
     avatar: {
       type: String,
       default: ""
-    },
-    edadAdulto: {
-      type: Number,
-      default: 18
     },
     esInfantil: {
       type: Boolean,
@@ -38,6 +34,10 @@ const perfilSchema = new Schema(
     idiomaPerfil: {
       type: String,
       default: "es"
+    },
+    fechaCreacion: {
+      type: Date,
+      default: Date.now
     }
   },
   { _id: false }
@@ -55,12 +55,21 @@ const usuarioSchema = new Schema(
       type: String,
       required: true
     },
-    nombreCompleto: {
+    nombre: {
       type: String,
-      default: ""
+      required: true
+    },
+    apellido1: {
+      type: String,
+      required: true
+    },
+    apellido2: {
+      type: String,
+      required: true
     },
     fechaNacimiento: {
-      type: Date
+      type: Date,
+      required: true
     },
     edad: {
       type: Number
@@ -85,6 +94,10 @@ const usuarioSchema = new Schema(
     activo: {
       type: Boolean,
       default: true
+    },
+    fechaRegistro: {
+      type: Date,
+      default: Date.now
     },
     ultimoLogin: {
       type: Date

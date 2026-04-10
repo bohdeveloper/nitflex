@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useMe } from "../../hooks/useMe";
+import { useNavigate } from "react-router-dom";
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -9,6 +10,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
     const usuario = useMe();
+    const navigate = useNavigate();
     return (
         <>
         <aside>
@@ -22,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
             <ul className='pl-5'>
                 <li className='text-gray-300'><NavLink to="/cuenta">Cuenta</NavLink></li>
                 <li className='text-gray-300'><NavLink to="/ayuda">Ayuda</NavLink></li>
-                <li className='text-gray-300 cursor-pointer' onClick={onLogout}>Cerrar sesión</li>
+                <li className='text-gray-300 cursor-pointer' onClick={() => {onLogout(); navigate("/");}}>Cerrar sesión</li>
             </ul>
         </aside>
         </>
