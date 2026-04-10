@@ -16,7 +16,7 @@ export const me = async (req: any, res: Response) => {
 
 /* Crea usuario / Devuelve token / El frontend ya puede guardarlo */
 export const registro = async (req: Request, res: Response) => {
-  const { nombreCompleto, email, password } = req.body;
+  const { nombre, email, password } = req.body;
   
   if (!email || !password) {
     return res.status(400).json({ message: "Email y contraseña obligatorios" });
@@ -30,7 +30,7 @@ export const registro = async (req: Request, res: Response) => {
   const passwordOK = await bcrypt.hash(password, 10);
 
   const usuario = await Usuario.create({
-    nombreCompleto,
+    nombre,
     email,
     password: passwordOK
   });
@@ -46,7 +46,7 @@ export const registro = async (req: Request, res: Response) => {
     token,
     usuario: {
       id: usuario._id,
-      nombreCompleto: usuario.nombreCompleto,
+      nombre: usuario.nombre,
       email: usuario.email
     }
   });
