@@ -30,9 +30,9 @@ cd nitflex
 
 Estructura del proyecto:
 
-nitflex/
- ├── frontend/    → React + Vite + Tailwind
- ├── backend/     → Express + MongoDB
+nitflex/<br>
+ ├── frontend/    → React + Vite + Tailwind<br>
+ ├── backend/     → Express + MongoDB<br>
  └── package.json → Orquestador para desarrollo
 
 
