@@ -36,6 +36,9 @@ nitflex/
  ├── backend/    → Express + MongoDB
  └── package.json (orquestador para desarrollo)
 
+ *** IMPORTANTE: Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto en tu sistema.
+ *** Si deseas hacerlo de este modo, saltate el punto 3, 4 y 5.
+
 ──────────────────────────────────
 3. CONFIGURACIÓN DEL BACKEND
 ──────────────────────────────────
