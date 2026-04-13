@@ -8,9 +8,8 @@ Nitflex es una aplicación web tipo streaming que permite:
 - Interfaz tipo Netflix con React
 - Backend propio con Express y MongoDB
 
-──────────────────────────────────
 1. REQUISITOS PREVIOS
-──────────────────────────────────
+===================================
 
 Antes de comenzar, asegúrate de tener instalado:
 
@@ -20,9 +19,8 @@ Antes de comenzar, asegúrate de tener instalado:
 - MongoDB Compass (opcional, para ver la base de datos)
 - Git
 
-──────────────────────────────────
 2. DESCARGA DEL PROYECTO
-──────────────────────────────────
+===================================
 
 Clonar el repositorio desde Git:
 
@@ -37,13 +35,12 @@ nitflex/
  └── package.json (orquestador para desarrollo)
 
  ***************************************************************************************************************
- *** IMPORTANTE: Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto en tu sistema.
- *** Si deseas hacerlo de este modo, saltate el punto 3, 4 y 5.
+ * IMPORTANTE: Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto en tu sistema.
+ Si deseas hacerlo de este modo, saltate el punto 3, 4 y 5.
  ***************************************************************************************************************
 
-──────────────────────────────────
 3. CONFIGURACIÓN DEL BACKEND
-──────────────────────────────────
+===================================
 
 Entrar en la carpeta backend:
 
@@ -65,9 +62,8 @@ JWT_SECRET=clave_secreta_para_jwt
 
 Asegúrate de que MongoDB esté ejecutándose como servicio local.
 
-──────────────────────────────────
 4. CONFIGURACIÓN DEL FRONTEND
-──────────────────────────────────
+===================================
 
 Entrar en la carpeta frontend:
 
@@ -90,9 +86,8 @@ IMPORTANTE:
 - La API Key debe obtenerse desde https://www.themoviedb.org/
 - Las variables de Vite deben empezar por VITE_
 
-──────────────────────────────────
 5. ARRANQUE DE LA APLICACIÓN
-──────────────────────────────────
+===================================
 
 Desde la carpeta raíz del proyecto:
 
@@ -110,9 +105,8 @@ Esto arrancará:
 - Frontend en http://localhost:5173
 - Backend en http://localhost:5000
 
-──────────────────────────────────
 6. FUNCIONAMIENTO GENERAL
-──────────────────────────────────
+===================================
 
 - Al acceder a la aplicación sin sesión:
   - Se muestra la landing pública
@@ -138,9 +132,8 @@ Esto arrancará:
   - Se cierra el sidebar
   - Se vuelve a la vista pública
 
-──────────────────────────────────
 7. BASE DE DATOS
-──────────────────────────────────
+===================================
 
 - Base de datos: MongoDB
 - Nombre por defecto: nitflex
@@ -154,9 +147,8 @@ Cada usuario contiene:
 
 La base de datos puede visualizarse con MongoDB Compass.
 
-──────────────────────────────────
 8. TECNOLOGÍAS UTILIZADAS
-──────────────────────────────────
+===================================
 
 Frontend:
 - React
@@ -176,9 +168,8 @@ Backend:
 API externa:
 - The Movie Database (TMDB)
 
-──────────────────────────────────
 9. NOTAS FINALES
-──────────────────────────────────
+===================================
 
 - El proyecto está preparado para ampliaciones futuras:
   - Perfiles por usuario
