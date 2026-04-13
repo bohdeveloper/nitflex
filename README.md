@@ -8,6 +8,20 @@ Nitflex es una aplicación web tipo streaming que permite:
 - Interfaz tipo Netflix con React
 - Backend propio con Express y MongoDB
 
+********************************************************************************
+IMPORTANTE:
+Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto
+en tu sistema.  
+Si utilizas este método, puedes saltarte los puntos 2, 3, 4 y 5.
+
+El archivo se encarga de detectar si existen los programas MongoDB, Postman y VSC.
+Si existen los arrancará junto al servidor de Vite.
+
+Esto iniciará:
+- Frontend en http://localhost:5173
+- Backend en  http://localhost:5000
+
+********************************************************************************
 
 ======= 1. REQUISITOS PREVIOS =======
 
@@ -34,15 +48,6 @@ nitflex/<br>
  ├── frontend/    → React + Vite + Tailwind<br>
  ├── backend/     → Express + MongoDB<br>
  └── package.json → Orquestador para desarrollo
-
-
-********************************************************************************
-IMPORTANTE:
-Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto
-en tu sistema.  
-Si utilizas este método, puedes saltarte los puntos 3, 4 y 5.
-********************************************************************************
-
 
 ======= 3. CONFIGURACIÓN DEL BACKEND =======
 
