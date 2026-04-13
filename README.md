@@ -1,5 +1,5 @@
 NITFLEX – GUÍA DE INSTALACIÓN Y USO
-=================================
+===================================
 
 Nitflex es una aplicación web tipo streaming que permite:
 - Registro y login de usuarios
@@ -36,8 +36,10 @@ nitflex/
  ├── backend/    → Express + MongoDB
  └── package.json (orquestador para desarrollo)
 
+ ***************************************************************************************************************
  *** IMPORTANTE: Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto en tu sistema.
  *** Si deseas hacerlo de este modo, saltate el punto 3, 4 y 5.
+ ***************************************************************************************************************
 
 ──────────────────────────────────
 3. CONFIGURACIÓN DEL BACKEND
