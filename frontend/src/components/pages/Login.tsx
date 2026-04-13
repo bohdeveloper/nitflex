@@ -31,8 +31,8 @@ export default function Login() {
       login(data.token);
       console.log("Acceso correcto:", data.usuario);
 
-      // Redirigimos al inicio
-      navigate("/");
+      // Redirigimos a perfiles
+      navigate("/perfiles");
 
     } catch {
       setError("Error de conexión");
