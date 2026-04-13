@@ -9,8 +9,7 @@ Nitflex es una aplicación web tipo streaming que permite:
 - Backend propio con Express y MongoDB
 
 
-1. REQUISITOS PREVIOS
-====================
+======= 1. REQUISITOS PREVIOS =======
 
 Antes de comenzar, asegúrate de tener instalado:
 
@@ -21,8 +20,7 @@ Antes de comenzar, asegúrate de tener instalado:
 - Git
 
 
-2. DESCARGA DEL PROYECTO
-=======================
+======= 2. DESCARGA DEL PROYECTO =======
 
 Clonar el repositorio desde Git:
 
@@ -46,8 +44,7 @@ Si utilizas este método, puedes saltarte los puntos 3, 4 y 5.
 ********************************************************************************
 
 
-3. CONFIGURACIÓN DEL BACKEND
-===========================
+======= 3. CONFIGURACIÓN DEL BACKEND =======
 
 Entrar en la carpeta backend:
 
@@ -73,8 +70,7 @@ JWT_SECRET=clave_secreta_para_jwt
 Asegúrate de que MongoDB esté ejecutándose como servicio local.
 
 
-4. CONFIGURACIÓN DEL FRONTEND
-=============================
+======= 4. CONFIGURACIÓN DEL FRONTEND =======
 
 Entrar en la carpeta frontend:
 
@@ -101,8 +97,7 @@ IMPORTANTE:
 - Las variables de entorno de Vite deben empezar por "VITE_"
 
 
-5. ARRANQUE DE LA APLICACIÓN
-============================
+======= 5. ARRANQUE DE LA APLICACIÓN =======
 
 Desde la carpeta raíz del proyecto:
 
@@ -124,8 +119,7 @@ Esto iniciará:
 - Backend en  http://localhost:5000
 
 
-6. FUNCIONAMIENTO GENERAL
-=========================
+======= 6. FUNCIONAMIENTO GENERAL =======
 
 Acceso sin sesión:
 - Se muestra la landing pública
@@ -156,8 +150,7 @@ Logout:
 - Se vuelve a la vista pública
 
 
-7. BASE DE DATOS
-================
+======= 7. BASE DE DATOS =======
 
 - Motor: MongoDB
 - Base de datos: nitflex
@@ -174,8 +167,7 @@ Cada usuario contiene:
 La base de datos puede visualizarse con MongoDB Compass.
 
 
-8. TECNOLOGÍAS UTILIZADAS
-========================
+======= 8. TECNOLOGÍAS UTILIZADAS =======
 
 Frontend:
 - React
@@ -197,9 +189,7 @@ Backend:
 API externa:
 - The Movie Database (TMDB)
 
-
-9. NOTAS FINALES
-================
+======= 9. NOTAS FINALES =======
 
 - El proyecto está preparado para futuras ampliaciones:
   - Perfiles por usuario
