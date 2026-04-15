@@ -132,8 +132,8 @@ export default function Perfiles() {
     <div className="flex gap-6">
       {perfiles.map((perfil, index) => (
         <div key={index} className="text-center cursor-pointer">
-          <div className="w-24 h-24 bg-gray-700 rounded-md mb-2 flex items-center justify-center">
-            <img src={avatarNitflex} alt="Avatar nitflex" className="avatar-nitflex" />
+          <div className="w-24 h-24 bg-gray-700 rounded-full mb-2 flex items-center justify-center">
+            <img src={avatarNitflex} alt="Avatar nitflex" className="avatar-nitflex rounded-full" />
           </div>
           <p>{perfil.nombrePerfil}</p>
           {perfil.esInfantil && (
@@ -147,7 +147,7 @@ export default function Perfiles() {
         onClick={() => setMostrandoFormulario(true)}
         className="text-center cursor-pointer"
       >
-        <div className="w-24 h-24 bg-gray-600 rounded-md mb-2 flex items-center justify-center text-3xl">
+        <div className="w-24 h-24 bg-gray-600 rounded-full mb-2 flex items-center justify-center text-3xl">
           +
         </div>
         <p className="text-sm">Añadir perfil</p>
