@@ -16,7 +16,7 @@ const Nav: React.FC = () => {
       ) : (
         <ul className='flex items-center justify-end'>
           <li>
-            <NavLink to="/login" className="login w-full bg-red-600 text-white p-3 rounded">Iniciar sesíon</NavLink>
+            <NavLink to="/login" className="login w-full bg-red-600 text-white p-3 rounded">Iniciar sesión</NavLink>
           </li>
         </ul>
       )}

@@ -16,11 +16,7 @@ export const me = async (req: any, res: Response) => {
 
 /* Crea usuario / Devuelve token / El frontend ya puede guardarlo */
 export const registro = async (req: Request, res: Response) => {
-  const { nombre, email, password } = req.body;
-  
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email y contraseña obligatorios" });
-  }
+  const { nombre, apellido1, apellido2, email, password, fechaNacimiento } = req.body;
 
   const existeUsuario = await Usuario.findOne({ email });
   if (existeUsuario) {
@@ -31,8 +27,11 @@ export const registro = async (req: Request, res: Response) => {
 
   const usuario = await Usuario.create({
     nombre,
+    apellido1,
+    apellido2,
     email,
-    password: passwordOK
+    password: passwordOK,
+    fechaNacimiento
   });
 
   const token = jwt.sign(
@@ -47,7 +46,11 @@ export const registro = async (req: Request, res: Response) => {
     usuario: {
       id: usuario._id,
       nombre: usuario.nombre,
-      email: usuario.email
+      apellido1: usuario.apellido1,
+      apellido2: usuario.apellido2,
+      email: usuario.email,
+      password: usuario.password,
+      fechaNacimiento: usuario.fechaNacimiento
     }
   });
 };
@@ -76,7 +79,12 @@ export const login = async (req: Request, res: Response) => {
     token,
     usuario: {
       id: usuario._id,
-      email: usuario.email
+      nombre: usuario.nombre,
+      apellido1: usuario.apellido1,
+      apellido2: usuario.apellido2,
+      email: usuario.email,
+      password: usuario.password,
+      fechaNacimiento: usuario.fechaNacimiento
     }
   });
 
