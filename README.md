@@ -14,9 +14,6 @@ Puedes ejecutar el archivo "setup.bat" para agilizar el montaje del proyecto
 en tu sistema.  
 Si utilizas este método, puedes saltarte los puntos 2, 3, 4 y 5.
 
-El archivo se encarga de detectar si existen los programas MongoDB, Postman y VSC.
-Si existen los arrancará junto al servidor de Vite.
-
 Esto iniciará:
 - Frontend en http://localhost:5173
 - Backend en  http://localhost:5000
