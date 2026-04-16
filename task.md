@@ -8,9 +8,9 @@
 # ✅ perfiles.controller.ts (CRUD de perfiles)
 # ✅ authMiddleware que: valida JWT, añade req.usuarioId
 
-# ✅ Crear un perfil
-# Eliminar un perfil
-# Seleccionar un perfil
-# Modificar un perfil
+# ✅ Crear un perfil de usuario
+# Eliminar un perfil de usuario
+# Seleccionar un perfil de usuario
+# Modificar un perfil de usuario
 
 # Proteger urls sin acceso
