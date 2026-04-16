@@ -73,7 +73,7 @@ export default function Registro() {
       console.log("Usuario registrado:", data.usuario);
 
       // Redirigimos al inicio
-      navigate("/");
+      navigate("/perfiles");
 
     } catch (err) {
       setError("Error de conexión con el servidor");

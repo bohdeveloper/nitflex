@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import perfilesRoutes from "./routes/perfiles.routes";
+import path from "path";
 
 dotenv.config();
 
@@ -16,3 +17,6 @@ app.use("/auth", authRoutes);
 
 // Perfiles
 app.use("/perfiles", perfilesRoutes);
+
+// Avatares
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));

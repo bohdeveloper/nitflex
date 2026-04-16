@@ -1,6 +1,6 @@
-import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/Usuario";
+import { Response } from "express";
 import { Request } from "express";
 
 /**
@@ -8,6 +8,7 @@ import { Request } from "express";
  */
 interface AuthRequest extends Request {
   usuarioId?: string;
+  file?: Express.Multer.File;
 }
 
 /**
@@ -43,12 +44,18 @@ export const crearPerfil = async (
   req: AuthRequest,
   res: Response
 ): Promise<void> => {
-  const { nombrePerfil, avatar, esInfantil, idiomaPerfil } = req.body;
+  const { nombrePerfil, esInfantil } = req.body;
 
-  if (!nombrePerfil) {
+  
+console.log("BODY:", req.body);
+console.log("FILE:", req.file);
+
+  if (!req.body || !req.body.nombrePerfil) {
+    console.error("Body vacío:", req.body);
     res.status(400).json({ message: "El nombre del perfil es obligatorio" });
     return;
   }
+
 
   try {
     if (!req.usuarioId) {
@@ -63,11 +70,14 @@ export const crearPerfil = async (
       return;
     }
 
+    const avatarPath = req.file
+      ? `/uploads/avatars/${req.file.filename}`
+      : "";
+
     usuario.perfiles.push({
       nombrePerfil,
-      avatar: avatar || "",
-      esInfantil: esInfantil ?? false,
-      idiomaPerfil: idiomaPerfil || "es",
+      avatar: avatarPath,
+      esInfantil: esInfantil === "true",
       fechaCreacion: new Date()
     });
 
