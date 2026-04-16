@@ -13,4 +13,4 @@
 # Seleccionar un perfil de usuario
 # Modificar un perfil de usuario
 
-# Proteger urls sin acceso
+# Proteger urls sin acceso (no se pueda acceder a páginas sin token)
