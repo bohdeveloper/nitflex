@@ -37,7 +37,7 @@ export const registro = async (req: Request, res: Response) => {
   const token = jwt.sign(
     { usuarioId: usuario._id },
     process.env.JWT_SECRET!,
-    { expiresIn: "7d" }
+    { expiresIn: "1d" }
   );
 
   res.status(201).json({
@@ -72,7 +72,7 @@ export const login = async (req: Request, res: Response) => {
   const token = jwt.sign(
     { usuarioId: usuario._id },
     process.env.JWT_SECRET!,
-    { expiresIn: "7d" }
+    { expiresIn: "1d" }
   );
 
   res.json({

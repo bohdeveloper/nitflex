@@ -10,7 +10,7 @@ echo.
 :: ------------------------------------------------------------
 :: RUTAS DEL PROYECTO
 :: ------------------------------------------------------------
-set NITFLEX_DIR=C:\aplic\nitflex
+set NITFLEX_DIR=C:\Cursos\react\apps\nitflex
 set FRONTEND_DIR=%NITFLEX_DIR%\frontend
 set BACKEND_DIR=%NITFLEX_DIR%\backend
 
