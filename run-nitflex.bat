@@ -69,7 +69,17 @@ if not exist "%BACKEND_DIR%\node_modules" (
 ) else (
     echo Dependencias del backend OK.
 )
+echo.
 
+echo Comprobando multer (subida de archivos)...
+
+if not exist "%BACKEND_DIR%\node_modules\multer" (
+    echo Instalando multer...
+    cd /d "%BACKEND_DIR%"
+    call npm install multer --save
+) else (
+    echo Multer OK.
+)
 echo.
 
 :: ------------------------------------------------------------

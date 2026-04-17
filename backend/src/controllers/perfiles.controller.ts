@@ -2,6 +2,9 @@ import jwt from "jsonwebtoken";
 import { Usuario } from "../models/Usuario";
 import { Response } from "express";
 import { Request } from "express";
+import fs from "fs";
+import path from "path";
+
 
 /**
  * Reutilizamos el mismo tipo que en auth.middleware
@@ -45,10 +48,6 @@ export const crearPerfil = async (
   res: Response
 ): Promise<void> => {
   const { nombrePerfil, esInfantil } = req.body;
-
-  
-console.log("BODY:", req.body);
-console.log("FILE:", req.file);
 
   if (!req.body || !req.body.nombrePerfil) {
     console.error("Body vacío:", req.body);
@@ -97,7 +96,7 @@ export const actualizarPerfil = async (
   res: Response
 ): Promise<void> => {
   const index = Number(req.params.index);
-  const data = req.body;
+  const { nombrePerfil, esInfantil } = req.body;
 
   try {
     if (!req.usuarioId) {
@@ -112,11 +111,41 @@ export const actualizarPerfil = async (
       return;
     }
 
-    Object.assign(usuario.perfiles[index], data);
+    const perfil = usuario.perfiles[index];
+
+    // ✅ Actualizar nombre
+    if (nombrePerfil !== undefined) {
+      perfil.nombrePerfil = nombrePerfil;
+    }
+
+    // ✅ Actualizar perfil infantil
+    if (esInfantil !== undefined) {
+      perfil.esInfantil = esInfantil === "true" || esInfantil === true;
+    }
+
+    // ✅ Si viene nuevo avatar
+    if (req.file) {
+      // borrar avatar antiguo si existe
+      if (perfil.avatar) {
+        const oldAvatarPath = path.join(
+          __dirname,
+          "..",
+          perfil.avatar
+        );
+
+        if (fs.existsSync(oldAvatarPath)) {
+          fs.unlinkSync(oldAvatarPath);
+        }
+      }
+
+      perfil.avatar = `/uploads/avatars/${req.file.filename}`;
+    }
+
     await usuario.save();
 
-    res.json(usuario.perfiles[index]);
-  } catch {
+    res.json(perfil);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error al actualizar perfil" });
   }
 };
@@ -143,11 +172,22 @@ export const eliminarPerfil = async (
       return;
     }
 
+    const perfil = usuario.perfiles[index];
+
+    // ✅ borrar avatar si existe
+    if (perfil.avatar) {
+      const avatarPath = path.join(__dirname, "..", perfil.avatar);
+      if (fs.existsSync(avatarPath)) {
+        fs.unlinkSync(avatarPath);
+      }
+    }
+
     usuario.perfiles.splice(index, 1);
     await usuario.save();
 
-    res.json({ message: "Perfil eliminado correctamente" });
-  } catch {
+    res.json(usuario.perfiles); // ✅ devolvemos lista actualizada
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error al eliminar perfil" });
   }
 };

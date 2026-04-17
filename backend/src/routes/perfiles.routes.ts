@@ -1,7 +1,4 @@
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { uploadAvatar } from "../middlewares/uploadAvatar";
-
 import {
   crearPerfil,
   obtenerPerfiles,
@@ -9,15 +6,18 @@ import {
   eliminarPerfil,
   seleccionarPerfil
 } from "../controllers/perfiles.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { uploadAvatar } from "../middlewares/uploadAvatar";
+
 
 const router = Router();
 
 router.use(authMiddleware);
 
-router.get("/", obtenerPerfiles);
+router.get("/", authMiddleware, obtenerPerfiles);
 router.post("/", authMiddleware, uploadAvatar.single("avatar"), crearPerfil);
-router.put("/:index", actualizarPerfil);
-router.delete("/:index", eliminarPerfil);
-router.post("/seleccionar", seleccionarPerfil);
+router.put("/:index", authMiddleware, uploadAvatar.single("avatar"), actualizarPerfil);
+router.delete("/:index", authMiddleware, eliminarPerfil);
+router.post("/seleccionar", authMiddleware, seleccionarPerfil);
 
 export default router;

@@ -1,4 +1,13 @@
 import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+const uploadDir = path.join(__dirname, "..", "uploads", "avatars");
+
+// Crear carpeta si no existe
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -20,5 +29,8 @@ const fileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
 
 export const uploadAvatar = multer({
   storage,
-  fileFilter
+  fileFilter,
+  limits: {
+    fileSize: 2 * 1024 * 1024 // 2 MB
+  }
 });
