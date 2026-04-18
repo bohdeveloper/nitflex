@@ -1,5 +1,5 @@
 NITFLEX – GUÍA DE INSTALACIÓN Y USO
-=================================
+===================================
 
 Nitflex es una aplicación web tipo streaming que permite:
 - Registro y login de usuarios
