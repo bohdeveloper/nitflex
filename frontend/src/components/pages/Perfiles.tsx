@@ -185,7 +185,7 @@ const resetFormulario = () => {
 }
 
   return (
-<div className="p-5 pt-20 bg-black text-white flex flex-col items-center justify-center">      
+<div className="p-5 pt-20 text-white flex flex-col items-center justify-center">      
   <h1 className="text-2xl mb-6">
     {mostrandoFormulario || perfiles.length === 0
       ? esEdicion ? "Editar perfil" : "Crear perfil"
