@@ -18,3 +18,5 @@
 # Controlar subidas de imagenes en uploads/avatars para que no se acumulen
 # Mostrar los datos de ese usuario en /inicio: Peliculas y Series Favoritas, Cuenta...
 # Proteger urls sin acceso + carga de imagenes (no se pueda acceder a páginas sin token)
+# Mostrar datos de peliculas + trailer? al pinchar sobre ellas
+# Carrusel de peliculas estilo netflix
