@@ -200,7 +200,6 @@ API externa:
   - Perfiles por usuario
   - Favoritos
   - Control parental
-  - Historial de visualización
 
 - El token JWT se gestiona desde el frontend mediante Context API.
 - El backend expone una API REST para autenticación y gestión de usuarios.
