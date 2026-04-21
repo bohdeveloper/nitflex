@@ -5,9 +5,10 @@ import { Request } from "express";
 import fs from "fs";
 import path from "path";
 
-
 /**
- * Reutilizamos el mismo tipo que en auth.middleware
+ * Extiende el tipo Request de Express para incluir:
+ * - usuarioId: inyectado por el middleware de autenticación desde el JWT
+ * - file: archivo subido mediante Multer (avatar del perfil)
  */
 interface AuthRequest extends Request {
   usuarioId?: string;
@@ -15,18 +16,23 @@ interface AuthRequest extends Request {
 }
 
 /**
- * Obtener perfiles
+ * Obtener perfiles del usuario autenticado.
+ *
+ * - Requiere que el usuario esté autenticado.
+ * - Devuelve únicamente el array de perfiles del usuario.
  */
 export const obtenerPerfiles = async (
   req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
+    // Verifica que el usuario esté autenticado
     if (!req.usuarioId) {
       res.status(401).json({ message: "No autenticado" });
       return;
     }
 
+    // Buscar el usuario y devolver solo el campo "perfiles"
     const usuario = await Usuario.findById(req.usuarioId).select("perfiles");
 
     if (!usuario) {
@@ -34,6 +40,7 @@ export const obtenerPerfiles = async (
       return;
     }
 
+    // Devuelve la lista de perfiles
     res.json(usuario.perfiles);
   } catch {
     res.status(500).json({ message: "Error al obtener perfiles" });
@@ -41,7 +48,11 @@ export const obtenerPerfiles = async (
 };
 
 /**
- * Crear perfil
+ * Crear un nuevo perfil para el usuario autenticado.
+ *
+ * - Permite subir un avatar mediante Multer.
+ * - Añade el perfil al array de perfiles del usuario.
+ * - Devuelve la lista completa de perfiles actualizada.
  */
 export const crearPerfil = async (
   req: AuthRequest,
@@ -49,14 +60,15 @@ export const crearPerfil = async (
 ): Promise<void> => {
   const { nombrePerfil, esInfantil } = req.body;
 
+  // Validación básica del body
   if (!req.body || !req.body.nombrePerfil) {
     console.error("Body vacío:", req.body);
     res.status(400).json({ message: "El nombre del perfil es obligatorio" });
     return;
   }
 
-
   try {
+    // Verifica autenticación
     if (!req.usuarioId) {
       res.status(401).json({ message: "No autenticado" });
       return;
@@ -69,10 +81,12 @@ export const crearPerfil = async (
       return;
     }
 
+    // Si se ha subido avatar, se guarda la ruta, si no se deja vacío
     const avatarPath = req.file
       ? `/uploads/avatars/${req.file.filename}`
       : "";
 
+    // Añadir el nuevo perfil al usuario
     usuario.perfiles.push({
       nombrePerfil,
       avatar: avatarPath,
@@ -82,6 +96,7 @@ export const crearPerfil = async (
 
     await usuario.save();
 
+    // Devolver lista completa de perfiles
     res.status(201).json(usuario.perfiles);
   } catch {
     res.status(500).json({ message: "Error al crear perfil" });
@@ -89,7 +104,11 @@ export const crearPerfil = async (
 };
 
 /**
- * Actualizar perfil
+ * Actualizar un perfil existente.
+ *
+ * - Permite modificar nombre y tipo (infantil/adulto).
+ * - Permite sustituir el avatar, borrando el anterior del disco.
+ * - Devuelve únicamente el perfil actualizado.
  */
 export const actualizarPerfil = async (
   req: AuthRequest,
@@ -99,6 +118,7 @@ export const actualizarPerfil = async (
   const { nombrePerfil, esInfantil } = req.body;
 
   try {
+    // Verifica autenticación
     if (!req.usuarioId) {
       res.status(401).json({ message: "No autenticado" });
       return;
@@ -113,26 +133,20 @@ export const actualizarPerfil = async (
 
     const perfil = usuario.perfiles[index];
 
-    // ✅ Actualizar nombre
+    // Actualizar nombre del perfil si se proporciona
     if (nombrePerfil !== undefined) {
       perfil.nombrePerfil = nombrePerfil;
     }
 
-    // ✅ Actualizar perfil infantil
+    // Actualizar si el perfil es infantil
     if (esInfantil !== undefined) {
       perfil.esInfantil = esInfantil === "true" || esInfantil === true;
     }
 
-    // ✅ Si viene nuevo avatar
+    // Si se sube un nuevo avatar, se elimina el anterior
     if (req.file) {
-      // borrar avatar antiguo si existe
       if (perfil.avatar) {
-        const oldAvatarPath = path.join(
-          __dirname,
-          "..",
-          perfil.avatar
-        );
-
+        const oldAvatarPath = path.join(__dirname, "..", perfil.avatar);
         if (fs.existsSync(oldAvatarPath)) {
           fs.unlinkSync(oldAvatarPath);
         }
@@ -143,6 +157,7 @@ export const actualizarPerfil = async (
 
     await usuario.save();
 
+    // Devuelve el perfil actualizado
     res.json(perfil);
   } catch (error) {
     console.error(error);
@@ -151,7 +166,11 @@ export const actualizarPerfil = async (
 };
 
 /**
- * Eliminar perfil
+ * Eliminar un perfil.
+ *
+ * - Elimina el perfil del array.
+ * - Borra el avatar del disco si existe.
+ * - Devuelve la lista de perfiles actualizada.
  */
 export const eliminarPerfil = async (
   req: AuthRequest,
@@ -160,6 +179,7 @@ export const eliminarPerfil = async (
   const index = Number(req.params.index);
 
   try {
+    // Verifica autenticación
     if (!req.usuarioId) {
       res.status(401).json({ message: "No autenticado" });
       return;
@@ -174,7 +194,7 @@ export const eliminarPerfil = async (
 
     const perfil = usuario.perfiles[index];
 
-    // ✅ borrar avatar si existe
+    // Borrar avatar del disco si existe
     if (perfil.avatar) {
       const avatarPath = path.join(__dirname, "..", perfil.avatar);
       if (fs.existsSync(avatarPath)) {
@@ -182,10 +202,12 @@ export const eliminarPerfil = async (
       }
     }
 
+    // Eliminar el perfil del array
     usuario.perfiles.splice(index, 1);
     await usuario.save();
 
-    res.json(usuario.perfiles); // ✅ devolvemos lista actualizada
+    // Devolver lista de perfiles actualizada
+    res.json(usuario.perfiles);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al eliminar perfil" });
@@ -193,7 +215,14 @@ export const eliminarPerfil = async (
 };
 
 /**
- * Seleccionar perfil activo
+ * Seleccionar un perfil activo.
+ *
+ * - Genera un nuevo token JWT específico para el perfil.
+ * - Incluye información como:
+ *   - índice del perfil
+ *   - si es infantil
+ *   - rol del usuario
+ * - Devuelve el token y el perfil activo al frontend.
  */
 export const seleccionarPerfil = async (
   req: AuthRequest,
@@ -201,12 +230,14 @@ export const seleccionarPerfil = async (
 ): Promise<void> => {
   const { index } = req.body;
 
+  // Validar que se reciba el índice del perfil
   if (index === undefined) {
     res.status(400).json({ message: "Índice de perfil requerido" });
     return;
   }
 
   try {
+    // Verifica autenticación
     if (!req.usuarioId) {
       res.status(401).json({ message: "No autenticado" });
       return;
@@ -221,6 +252,7 @@ export const seleccionarPerfil = async (
 
     const perfil = usuario.perfiles[index];
 
+    // Generar token JWT asociado al perfil seleccionado
     const token = jwt.sign(
       {
         usuarioId: usuario._id,
@@ -232,6 +264,7 @@ export const seleccionarPerfil = async (
       { expiresIn: "7d" }
     );
 
+    // Devuelve el nuevo token y el perfil activo
     res.json({
       token,
       perfilActivo: perfil

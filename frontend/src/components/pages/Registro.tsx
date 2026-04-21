@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState } from "react"; "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import './Registro.css'
+import "./Registro.css";
 
+/**
+ * Tipo que define los errores del formulario.
+ *
+ * - Cada propiedad representa un campo inválido.
+ * - Se utiliza para aplicar estilos de error en los inputs.
+ */
 type FormErrores = {
   nombre?: boolean;
   apellido1?: boolean;
@@ -12,7 +18,17 @@ type FormErrores = {
   fechaNacimiento?: boolean;
 };
 
+/**
+ * Componente Registro
+ *
+ * - Permite crear una cuenta de usuario.
+ * - Incluye validación básica en frontend.
+ * - Envía los datos al backend.
+ * - Guarda el token recibido en el AuthContext.
+ * - Redirige a la selección de perfiles tras el registro.
+ */
 export default function Registro() {
+  // Estados de los campos del formulario
   const [nombre, setNombre] = useState("");
   const [apellido1, setApellido1] = useState("");
   const [apellido2, setApellido2] = useState("");
@@ -20,12 +36,23 @@ export default function Registro() {
   const [password, setPassword] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
 
+  // Estados para errores
   const [error, setError] = useState("");
   const [errores, setErrores] = useState<FormErrores>({});
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Función de login del contexto de autenticación
   const { login } = useAuth();
+
+  // Hook de navegación
   const navigate = useNavigate();
 
+  /**
+   * Valida el formulario antes de enviarlo.
+   *
+   * - Comprueba que los campos obligatorios no estén vacíos.
+   * - Marca los campos con error para mostrar feedback visual.
+   */
   const validateForm = (): boolean => {
     const newErrors: FormErrores = {};
 
@@ -47,7 +74,13 @@ export default function Registro() {
     return true;
   };
 
-/* Llamada POST / Manejo de errores / Guardado del token */
+  /**
+   * Maneja el envío del formulario.
+   *
+   * - Llama al endpoint POST /auth/registro.
+   * - Maneja errores de validación y de servidor.
+   * - Guarda el token recibido y redirige a /perfiles.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,7 +92,14 @@ export default function Registro() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ nombre, apellido1, apellido2, email, password, fechaNacimiento })
+        body: JSON.stringify({
+          nombre,
+          apellido1,
+          apellido2,
+          email,
+          password,
+          fechaNacimiento
+        })
       });
 
       const data = await res.json();
@@ -68,20 +108,22 @@ export default function Registro() {
         setError(data.message || "Error al registrarse");
         return;
       }
-      // Guardamos el token de usuario
+
+      // Guardar el token del usuario en el contexto global
       login(data.token);
       console.log("Usuario registrado:", data.usuario);
 
-      // Redirigimos al inicio
+      // Redirigir a la gestión de perfiles
       navigate("/perfiles");
-
-    } catch (err) {
+    } catch {
+      // Error de red o servidor no disponible
       setError("Error de conexión con el servidor");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto space-y-4">
+      {/* Título del formulario */}
       <h1 className="text-xl font-bold text-white">Registro</h1>
 
       {/* Nombre */}
@@ -93,7 +135,7 @@ export default function Registro() {
           id="nombre"
           type="text"
           value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          onChange={e => setNombre(e.target.value)}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.nombre
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -111,7 +153,7 @@ export default function Registro() {
           id="apellido1"
           type="text"
           value={apellido1}
-          onChange={(e) => setApellido1(e.target.value)}
+          onChange={e => setApellido1(e.target.value)}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.apellido1
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -129,7 +171,7 @@ export default function Registro() {
           id="apellido2"
           type="text"
           value={apellido2}
-          onChange={(e) => setApellido2(e.target.value)}
+          onChange={e => setApellido2(e.target.value)}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.apellido2
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -147,7 +189,7 @@ export default function Registro() {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.email
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -165,7 +207,7 @@ export default function Registro() {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.password
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -184,8 +226,8 @@ export default function Registro() {
           type="date"
           value={fechaNacimiento}
           max={new Date().toISOString().split("T")[0]}
-          onChange={(e) => setFechaNacimiento(e.target.value)}
-          onKeyDown={(e) => e.preventDefault()}
+          onChange={e => setFechaNacimiento(e.target.value)}
+          onKeyDown={e => e.preventDefault()}
           className={`w-full p-2 rounded text-black border-2 outline-none
             ${errores.fechaNacimiento
               ? "border-red-500 focus:ring-2 focus:ring-red-500"
@@ -207,7 +249,7 @@ export default function Registro() {
         </p>
       )}
 
-      {/* Botón */}
+      {/* Botón de envío */}
       <button className="w-full bg-red-600 hover:bg-red-700 transition text-white p-2 rounded">
         Crear cuenta
       </button>
