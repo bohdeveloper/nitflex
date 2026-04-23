@@ -23,10 +23,11 @@ interface Perfil {
  */
 export default function Perfiles() {
   // Token y función para seleccionar perfil desde el AuthContext
-  const { token, seleccionarPerfil } = useAuth();
+  const { token, seleccionarPerfil, perfilActivo, limpiarPerfil  } = useAuth();
 
   // Estado con la lista de perfiles del usuario
   const [perfiles, setPerfiles] = useState<Perfil[]>([]);
+  const [perfilSeleccionado, setPerfilSeleccionado] = useState<number | null>(null);
 
   // Estado para mensajes de error
   const [error, setError] = useState("");
@@ -45,6 +46,7 @@ export default function Perfiles() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
 
   /**
    * Cargar perfiles del usuario al montar el componente
@@ -78,12 +80,28 @@ export default function Perfiles() {
   }, [token]);
 
   /**
+   * Activar visualmente el perfil correcto
+   * al entrar en /perfiles o recargar la página
+   */
+  useEffect(() => {
+    if (perfilActivo && typeof perfilActivo.index === "number") {
+      setPerfilSeleccionado(perfilActivo.index);
+    } else {
+      setPerfilSeleccionado(null);
+    }
+  }, [perfilActivo]);
+
+  /**
    * Seleccionar un perfil activo.
    *
    * - Llama al backend para generar un nuevo token asociado al perfil.
    * - Guarda el token y el perfil activo en el AuthContext.
    */
   const seleccionarPerfilActivo = async (index: number) => {
+  setPerfilSeleccionado(index);
+
+  // Pequeño delay para que se vea la animación
+  setTimeout(async () => {
     try {
       const res = await fetch("http://localhost:5000/perfiles/seleccionar", {
         method: "POST",
@@ -98,14 +116,18 @@ export default function Perfiles() {
 
       if (!res.ok) {
         setError(data.message || "Error al seleccionar perfil");
+        setPerfilSeleccionado(null);
         return;
       }
 
-      seleccionarPerfil(data.token, data.perfilActivo);
+      seleccionarPerfil(data.token, data.perfilActivo, data.perfilIndex);
     } catch {
       setError("Error de conexión");
+      setPerfilSeleccionado(null);
     }
-  };
+  }, 300);
+};
+
 
   /**
    * Crear o actualizar un perfil.
@@ -228,10 +250,10 @@ export default function Perfiles() {
   return (
     <div className="p-5 pt-20 text-white flex flex-col items-center justify-center">
       {/* Título dinámico */}
-      <h1 className="text-2xl mb-6">
+      <h1 className="text-5xl mb-6">
         {mostrandoFormulario || perfiles.length === 0
-          ? esEdicion ? "Editar perfil" : "Crear perfil"
-          : "Elige tu perfil"}
+          ? esEdicion ? "Edita tu perfil" : "Crea tu perfil"
+          : "¿Quien eres? Elige tu perfil"}
       </h1>
 
       {/* Mensaje de error */}
@@ -323,70 +345,100 @@ export default function Perfiles() {
           )}
         </div>
       ) : (
-        /* ===== LISTA DE PERFILES ===== */
-        <div className="flex gap-6">
-          {perfiles.map((perfil, index) => (
-            <div key={index} className="text-center">
-              {/* Seleccionar perfil */}
+        <>
+          {/* ===== SELECCIÓN DE PERFILES ===== */} 
+          {perfilActivo && (
+            <button
+              onClick={() => {
+                limpiarPerfil();
+                setPerfilSeleccionado(null);
+              }}
+              className="mb-6 px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+            >
+              Cambiar perfil
+            </button>
+          )}
+          {/* ===== LISTA DE PERFILES ===== */}
+          <div className="flex gap-6">
+            {perfiles.map((perfil, index) => (
               <div
-                onClick={() => seleccionarPerfilActivo(index)}
-                className="w-24 h-24 bg-gray-700 rounded-full mb-2 flex items-center justify-center cursor-pointer"
+                key={index}
+                className={`text-center transition-opacity duration-300
+                  ${perfilSeleccionado !== null && perfilSeleccionado !== index
+                    ? "perfil-inactivo-wrapper"
+                    : ""}
+                `}
               >
-                {perfil.avatar ? (
-                  <img
-                    src={`http://localhost:5000${perfil.avatar}`}
-                    alt={perfil.nombrePerfil}
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                ) : (
-                  <img
-                    src={avatarNitflex}
-                    alt="Avatar nitflex"
-                    className="avatar-nitflex rounded-full"
-                  />
+                {/* Seleccionar perfil */}
+                <div
+                  onClick={() => seleccionarPerfilActivo(index)}                  
+                  className={`
+                    w-24 h-24 bg-gray-700 rounded-full mb-2
+                    flex items-center justify-center cursor-pointer
+                    transition-all duration-300
+                    ${perfilSeleccionado === index
+                      ? "perfil-activo"
+                      : "hover:scale-95"}
+                  `}
+                >
+                  {perfil.avatar ? (
+                    <img
+                      src={`http://localhost:5000${perfil.avatar}`}
+                      alt={perfil.nombrePerfil}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src={avatarNitflex}
+                      alt="Avatar nitflex"
+                      className="avatar-nitflex rounded-full"
+                    />
+                  )}
+                </div>
+
+                <p>{perfil.nombrePerfil}</p>
+
+                {perfil.esInfantil && (
+                  <span className="text-xs text-yellow-400 block">Infantil</span>
                 )}
+
+                <button
+                  onClick={() => {
+                    setPerfilEditando(index);
+                    setNombrePerfil(perfil.nombrePerfil);
+                    setEsInfantil(perfil.esInfantil);
+                    setAvatarPreview(
+                      perfil.avatar
+                        ? `http://localhost:5000${perfil.avatar}`
+                        : null
+                    );
+                    setMostrandoFormulario(true);
+                  }}
+                  className="text-xs text-gray-400 mt-1 hover:underline"
+                  disabled={perfilSeleccionado !== null}
+                >
+                  Editar
+                </button>
               </div>
+            ))}
 
-              <p>{perfil.nombrePerfil}</p>
-
-              {perfil.esInfantil && (
-                <span className="text-xs text-yellow-400 block">Infantil</span>
-              )}
-
-              {/* Editar perfil */}
-              <button
-                onClick={() => {
-                  setPerfilEditando(index);
-                  setNombrePerfil(perfil.nombrePerfil);
-                  setEsInfantil(perfil.esInfantil);
-                  setAvatarPreview(
-                    perfil.avatar
-                      ? `http://localhost:5000${perfil.avatar}`
-                      : null
-                  );
-                  setMostrandoFormulario(true);
-                }}
-                className="text-xs text-gray-400 mt-1 hover:underline"
-              >
-                Editar
-              </button>
+            {/* Añadir perfil */}
+            <div
+              onClick={() => {
+                resetFormulario();
+                setMostrandoFormulario(true);
+              }}
+              className={`text-center cursor-pointer transition-opacity duration-300
+                ${perfilSeleccionado !== null ? "perfil-inactivo-wrapper" : ""}
+              `}
+            >
+              <div className="w-24 h-24 bg-gray-600 rounded-full mb-2 flex items-center justify-center text-3xl">
+                +
+              </div>
+              <p className="text-sm">Añadir perfil</p>
             </div>
-          ))}
-
-          {/* Añadir perfil */}
-          <div
-            onClick={() => {
-              resetFormulario();
-              setMostrandoFormulario(true);
-            }}
-            className="text-center cursor-pointer"
-          >
-            <div className="w-24 h-24 bg-gray-600 rounded-full mb-2 flex items-center justify-center text-3xl">
-              +
-            </div>
-            <p className="text-sm">Añadir perfil</p>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

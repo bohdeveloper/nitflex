@@ -267,7 +267,8 @@ export const seleccionarPerfil = async (
     // Devuelve el nuevo token y el perfil activo
     res.json({
       token,
-      perfilActivo: perfil
+      perfilActivo: perfil,
+      perfilIndex: index
     });
   } catch {
     res.status(500).json({ message: "Error al seleccionar perfil" });

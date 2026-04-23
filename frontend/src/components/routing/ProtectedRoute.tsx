@@ -11,7 +11,12 @@ export default function ProtectedRoute({
   children,
   requireProfile = false
 }: ProtectedRouteProps) {
-  const { token, perfilActivo } = useAuth();
+  const { token, perfilActivo, isReady } = useAuth();
+
+  // Esperar a que se cargue la sesión antes de renderizar
+  if (!isReady) {
+    return null;
+  }
 
   // No hay sesión → login
   if (!token) {

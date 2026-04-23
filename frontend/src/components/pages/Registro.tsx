@@ -124,7 +124,7 @@ export default function Registro() {
   return (
     <form onSubmit={handleSubmit} className="mx-auto space-y-4">
       {/* Título del formulario */}
-      <h1 className="text-xl font-bold text-white">Registro</h1>
+      <h1 className="text-xl font-bold text-white">Termina de configurar tu cuenta</h1>
 
       {/* Nombre */}
       <div>

@@ -19,7 +19,7 @@ return (
             Si es tu primera visita
           </p>
           <span className="w-10 h-[1px] bg-red-600"></span>
-          <NavLink className="text-red-800 hover:text-red-600 text-2xl" to="/registro"> Registrate</NavLink>
+          <NavLink className="text-red-800 hover:text-red-600 text-2xl" to="/registro"> Empezar</NavLink>
         </div>
       </div>
     </>

@@ -65,7 +65,7 @@ export default function Login() {
       className="max-w-sm mx-auto space-y-4 mt-20"
     >
       {/* Título del formulario */}
-      <h1 className="text-xl font-bold">Iniciar sesión</h1>
+      <h1 className="text-2xl font-bold">Introduce la información para iniciar sesión</h1>
 
       {/* Campo de email */}
       <input

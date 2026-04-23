@@ -11,6 +11,7 @@ interface PerfilActivo {
   nombrePerfil: string;
   avatar: string;
   esInfantil: boolean;
+  index: number;
 }
 
 /**
@@ -22,11 +23,14 @@ interface PerfilActivo {
  * - seleccionarPerfil: guarda el token y el perfil activo.
  * - logout: limpia toda la sesión.
  */
+
 interface AuthContextType {
   token: string | null;
   perfilActivo: PerfilActivo | null;
+  isReady: boolean;
   login: (token: string) => void;
-  seleccionarPerfil: (token: string, perfil: PerfilActivo) => void;
+  seleccionarPerfil: (token: string, perfil: PerfilActivo, index: number) => void;
+  limpiarPerfil: () => void;
   logout: () => void;
 }
 
@@ -47,6 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Estado del perfil activo
   const [perfilActivo, setPerfilActivo] = useState<PerfilActivo | null>(null);
 
+  // Estado para controlar la carga inicial de la sesión
+  const [isReady, setIsReady] = useState(false);
+
   /**
    * Cargar sesión almacenada al iniciar la aplicación.
    *
@@ -64,6 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (storedPerfil) {
       setPerfilActivo(JSON.parse(storedPerfil));
     }
+
+    setIsReady(true);
   }, []);
 
   /**
@@ -84,13 +93,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * - Guarda el perfil activo en localStorage.
    * - Actualiza el estado global de la aplicación.
    */
-  const seleccionarPerfil = (newToken: string, perfil: PerfilActivo) => {
+  const seleccionarPerfil = (newToken: string, perfil: PerfilActivo, index: number) => {
+    const perfilConIndex = { ...perfil, index };
     localStorage.setItem("token", newToken);
-    localStorage.setItem("perfilActivo", JSON.stringify(perfil));
+    localStorage.setItem("perfilActivo", JSON.stringify(perfilConIndex));
     setToken(newToken);
-    setPerfilActivo(perfil);
+    setPerfilActivo(perfilConIndex);
   };
-
   /**
    * Cierra la sesión completamente.
    *
@@ -105,16 +114,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setPerfilActivo(null);
   };
 
+  /**
+   * Limpia el perfil activo sin cerrar la sesión.
+   *
+   * - Elimina el perfil activo de localStorage.
+   * - Resetea el estado global.
+   */
+  const limpiarPerfil = () => {
+    localStorage.removeItem("perfilActivo");
+    setPerfilActivo(null);
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        token,
-        perfilActivo,
-        login,
-        seleccionarPerfil,
-        logout
-      }}
-    >
+    <AuthContext.Provider value={{
+      token,
+      perfilActivo,
+      isReady,
+      login,
+      seleccionarPerfil,
+      limpiarPerfil,
+      logout
+    }}>
       {children}
     </AuthContext.Provider>
   );
