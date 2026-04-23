@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useMe } from "../../hooks/useMe";
 import { useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaUser, FaQuestionCircle } from "react-icons/fa";
 import './Sidebar.css';
@@ -23,8 +22,6 @@ interface SidebarProps {
  * - Permite navegar entre secciones y cerrar sesión.
  */
 const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
-  // Hook personalizado para obtener los datos del usuario autenticado
-  const usuario = useMe();
 
   // Hook de React Router para navegación programática
   const navigate = useNavigate();
@@ -32,17 +29,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
   return (
     <>
       <aside>
-        {/* Cabecera del sidebar con el nombre del usuario */}
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <p className="text-white text-2xl">·</p>
-          <span className="w-10 h-[1px] bg-red-600"></span>
-
-          {/* Mostrar el nombre del usuario si existe */}
-          <h2 className="pb-1 text-red-800 text-4xl">
-            {usuario && <p>{usuario.nombre}</p>}
-          </h2>
-        </div>
-
         {/* Opciones de navegación */}
         <ul className="pl-5">
           {/* Acceso a la gestión de perfiles */}
@@ -60,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
           {/* Enlace a la sección de ayuda */}
           <li className="flex items-center gap-3 text-gray-300 hover:text-white transition p-2 rounded">
             <FaQuestionCircle size={18} />
-            Centro de ayuda
+            <NavLink to="/ayuda">Centro de ayuda</NavLink>
           </li>
 
           <span className=" h-[1px] bg-white my-4 block"></span>

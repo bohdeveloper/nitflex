@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import avatarNitflex from "../../assets/images/avatar-nitflex.png";
 import "./Perfiles.css";
 
@@ -11,6 +12,17 @@ interface Perfil {
   nombrePerfil: string;
   avatar: string;
   esInfantil: boolean;
+  onCloseMenu?: () => void;
+}
+
+/**
+ * Props del componente Perfiles.
+ *
+ * - onCloseMenu: función opcional para cerrar el menú lateral
+ *   al seleccionar un perfil (en mobile).
+ */
+interface PerfilesProps {
+  onCloseMenu?: () => void;
 }
 
 /**
@@ -21,7 +33,7 @@ interface Perfil {
  * - Se integra con el backend protegido por JWT.
  * - Permite seleccionar un perfil activo para usar la aplicación.
  */
-export default function Perfiles() {
+export default function Perfiles({ onCloseMenu }: PerfilesProps) {
   // Token y función para seleccionar perfil desde el AuthContext
   const { token, seleccionarPerfil, perfilActivo, limpiarPerfil  } = useAuth();
 
@@ -46,6 +58,9 @@ export default function Perfiles() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Hook de navegación para redirigir tras acciones
+  const navigate = useNavigate();
 
 
   /**
@@ -121,6 +136,7 @@ export default function Perfiles() {
       }
 
       seleccionarPerfil(data.token, data.perfilActivo, data.perfilIndex);
+      navigate("/home");
     } catch {
       setError("Error de conexión");
       setPerfilSeleccionado(null);
@@ -352,6 +368,7 @@ export default function Perfiles() {
               onClick={() => {
                 limpiarPerfil();
                 setPerfilSeleccionado(null);
+                onCloseMenu?.();
               }}
               className="mb-6 px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
             >
@@ -414,8 +431,11 @@ export default function Perfiles() {
                     );
                     setMostrandoFormulario(true);
                   }}
-                  className="text-xs text-gray-400 mt-1 hover:underline"
-                  disabled={perfilSeleccionado !== null}
+                  className="text-xs text-gray-400 mt-1 hover:underline"                  
+                  disabled={
+                    perfilActivo !== null &&
+                    perfilActivo.index !== index
+                  }
                 >
                   Editar
                 </button>

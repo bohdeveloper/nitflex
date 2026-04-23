@@ -37,7 +37,7 @@ const Plantilla: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Obtener datos de autenticación desde el contexto
-  const { token, logout } = useAuth();
+  const { token, perfilActivo, logout } = useAuth();
 
   /**
    * Maneja el cierre de sesión.
@@ -82,7 +82,7 @@ const Plantilla: React.FC = () => {
                 path="/perfiles"
                 element={
                   <ProtectedRoute>
-                    <Perfiles />
+                    <Perfiles onCloseMenu={() => setIsMenuOpen(false)} />
                   </ProtectedRoute>
                 }
               />
@@ -118,11 +118,21 @@ const Plantilla: React.FC = () => {
 
           {/* Botón flotante para abrir/cerrar el menú lateral
               Solo se muestra si el usuario está autenticado */}
-          {token && (
-            <FaUserCircle
-              className="boton-lateral"
+          {token && perfilActivo && (            
+            <button
+              className="boton-lateral w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-            />
+            >
+              {perfilActivo.avatar ? (
+                <img
+                  src={`http://localhost:5000${perfilActivo.avatar}`}
+                  alt="Perfil activo"
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <FaUserCircle size={75} className="bg-white text-red-600 rounded-full object-cover" />
+              )}
+            </button>
           )}
 
           {/* Menú lateral (sidebar)
