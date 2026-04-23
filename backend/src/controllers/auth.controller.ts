@@ -10,7 +10,14 @@ import { Usuario } from "../models/Usuario";
  *   gracias al middleware de autenticación.
  * - No se devuelve la contraseña por seguridad.
  */
-export const me = async (req: any, res: Response) => {
+interface AuthRequest extends Request {
+  usuarioId?: string;
+  perfilIndex?: number;
+  esInfantil?: boolean;
+  rol?: string;
+}
+
+export const me = async (req: AuthRequest, res: Response) => {
   // Buscar el usuario por su ID y excluir el campo password
   const usuario = await Usuario.findById(req.usuarioId).select("-password");
 
@@ -70,7 +77,6 @@ export const registro = async (req: Request, res: Response) => {
       apellido1: usuario.apellido1,
       apellido2: usuario.apellido2,
       email: usuario.email,
-      password: usuario.password,
       fechaNacimiento: usuario.fechaNacimiento
     }
   });
@@ -115,7 +121,6 @@ export const login = async (req: Request, res: Response) => {
       apellido1: usuario.apellido1,
       apellido2: usuario.apellido2,
       email: usuario.email,
-      password: usuario.password,
       fechaNacimiento: usuario.fechaNacimiento
     }
   });
