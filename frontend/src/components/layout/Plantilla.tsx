@@ -2,6 +2,7 @@ import React from "react";
 
 // Pages
 import Inicio from "../pages/Inicio";
+import Home from "../pages/Home";
 import Peliculas from "../pages/Peliculas";
 import Series from "../pages/Series";
 import Registro from "../pages/Registro";
@@ -17,6 +18,7 @@ import Sidebar from "./Sidebar";
 import { FaUserCircle } from "react-icons/fa";
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import ProtectedRoute from "../routing/ProtectedRoute";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -69,13 +71,48 @@ const Plantilla: React.FC = () => {
             className="content flex flex-col items-center min-h-[calc(90vh-90px)]"
           >
             <Routes>
+              {/* Públicas */}
               <Route path="/" element={<Inicio />} />
               <Route path="/inicio" element={<Inicio />} />
-              <Route path="/peliculas" element={<Peliculas />} />
-              <Route path="/series" element={<Series />} />
-              <Route path="/Registro" element={<Registro />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/perfiles" element={<Perfiles />} />
+              <Route path="/Registro" element={<Registro />} />
+              
+              {/* Autenticado SIN perfil */}
+              <Route
+                path="/perfiles"
+                element={
+                  <ProtectedRoute>
+                    <Perfiles />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Autenticado + perfil */}
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute requireProfile>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/peliculas"
+                element={
+                  <ProtectedRoute requireProfile>
+                    <Peliculas />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/series"
+                element={
+                  <ProtectedRoute requireProfile>
+                    <Series />
+                  </ProtectedRoute>
+                }
+              />
+
             </Routes>
           </section>
 
