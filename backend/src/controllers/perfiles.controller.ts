@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/Usuario";
+import { deleteAvatarIfExists } from "../utils/avatar.utils";
 import { Response } from "express";
 import { Request } from "express";
 import fs from "fs";
@@ -145,13 +146,7 @@ export const actualizarPerfil = async (
 
     // Si se sube un nuevo avatar, se elimina el anterior
     if (req.file) {
-      if (perfil.avatar) {
-        const oldAvatarPath = path.join(__dirname, "..", perfil.avatar);
-        if (fs.existsSync(oldAvatarPath)) {
-          fs.unlinkSync(oldAvatarPath);
-        }
-      }
-
+      deleteAvatarIfExists(perfil.avatar);
       perfil.avatar = `/uploads/avatars/${req.file.filename}`;
     }
 
@@ -194,13 +189,8 @@ export const eliminarPerfil = async (
 
     const perfil = usuario.perfiles[index];
 
-    // Borrar avatar del disco si existe
-    if (perfil.avatar) {
-      const avatarPath = path.join(__dirname, "..", perfil.avatar);
-      if (fs.existsSync(avatarPath)) {
-        fs.unlinkSync(avatarPath);
-      }
-    }
+    // Si se sube un nuevo avatar, se elimina el anterior
+    deleteAvatarIfExists(perfil.avatar);
 
     // Eliminar el perfil del array
     usuario.perfiles.splice(index, 1);
