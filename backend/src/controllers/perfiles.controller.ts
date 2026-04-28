@@ -3,8 +3,6 @@ import { Usuario } from "../models/Usuario";
 import { deleteAvatarIfExists } from "../utils/avatar.utils";
 import { Response } from "express";
 import { Request } from "express";
-import fs from "fs";
-import path from "path";
 
 /**
  * Extiende el tipo Request de Express para incluir:
@@ -154,6 +152,7 @@ export const actualizarPerfil = async (
 
     // Devuelve el perfil actualizado
     res.json(perfil);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al actualizar perfil" });

@@ -35,7 +35,7 @@ interface PerfilesProps {
  */
 export default function Perfiles({ onCloseMenu }: PerfilesProps) {
   // Token y función para seleccionar perfil desde el AuthContext
-  const { token, seleccionarPerfil, perfilActivo, limpiarPerfil  } = useAuth();
+  const { token, seleccionarPerfil, perfilActivo, limpiarPerfil, actualizarPerfilActivo  } = useAuth();
 
   // Estado con la lista de perfiles del usuario
   const [perfiles, setPerfiles] = useState<Perfil[]>([]);
@@ -195,14 +195,16 @@ export default function Perfiles({ onCloseMenu }: PerfilesProps) {
     setMostrandoFormulario(false);
 
     if (esEdicion) {
-      // Actualiza el perfil editado en la lista
       setPerfiles(prev =>
         prev.map((p, i) => (i === perfilEditando ? data : p))
       );
+
+      // ✅ SI el perfil editado es el activo, sincronizar contexto
+      if (perfilActivo && perfilActivo.index === perfilEditando) {
+        actualizarPerfilActivo(data);
+      }
+
       setPerfilEditando(null);
-    } else {
-      // En creación, el backend devuelve la lista completa
-      setPerfiles(data);
     }
 
     if (fileInputRef.current) {

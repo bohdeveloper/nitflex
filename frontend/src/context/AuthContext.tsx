@@ -2,10 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 /**
  * Información del perfil activo.
- *
- * - Representa el perfil seleccionado por el usuario (estilo Netflix).
- * - Se utiliza para controlar el acceso, el avatar y el tipo de contenido
- *   (infantil o adulto).
  */
 interface PerfilActivo {
   nombrePerfil: string;
@@ -14,98 +10,101 @@ interface PerfilActivo {
   index: number;
 }
 
-/**
- * Tipo del contexto de autenticación.
- *
- * - token: JWT del usuario o del perfil activo.
- * - perfilActivo: perfil actualmente seleccionado.
- * - login: guarda el token de usuario tras login o registro.
- * - seleccionarPerfil: guarda el token y el perfil activo.
- * - logout: limpia toda la sesión.
- */
-
 interface AuthContextType {
   token: string | null;
   perfilActivo: PerfilActivo | null;
   isReady: boolean;
   login: (token: string) => void;
-  seleccionarPerfil: (token: string, perfil: PerfilActivo, index: number) => void;
+  seleccionarPerfil: (token: string, perfil: Omit<PerfilActivo, "index">, index: number) => void;
   limpiarPerfil: () => void;
   logout: () => void;
+  actualizarPerfilActivo: (perfilActualizado: Omit<PerfilActivo, "index">) => void;
 }
 
-// Contexto de autenticación (inicialmente indefinido)
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/**
- * AuthProvider
- *
- * - Proveedor global del contexto de autenticación.
- * - Gestiona la sesión del usuario y del perfil activo.
- * - Persiste los datos en localStorage.
- */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Estado del token JWT
   const [token, setToken] = useState<string | null>(null);
-
-  // Estado del perfil activo
   const [perfilActivo, setPerfilActivo] = useState<PerfilActivo | null>(null);
-
-  // Estado para controlar la carga inicial de la sesión
   const [isReady, setIsReady] = useState(false);
 
   /**
-   * Cargar sesión almacenada al iniciar la aplicación.
-   *
-   * - Recupera el token y el perfil activo desde localStorage.
-   * - Permite mantener la sesión tras recargar la página.
+   * Cargar sesión desde localStorage
    */
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedPerfil = localStorage.getItem("perfilActivo");
 
-    if (storedToken) {
-      setToken(storedToken);
-    }
+    if (storedToken) setToken(storedToken);
 
     if (storedPerfil) {
-      setPerfilActivo(JSON.parse(storedPerfil));
+      try {
+        setPerfilActivo(JSON.parse(storedPerfil));
+      } catch {
+        localStorage.removeItem("perfilActivo");
+      }
     }
 
     setIsReady(true);
   }, []);
 
   /**
-   * Guarda el token tras login o registro.
-   *
-   * - Se usa cuando el usuario se autentica,
-   *   pero aún no ha seleccionado perfil.
+   * Login SIN perfil (solo usuario)
    */
   const login = (newToken: string) => {
     localStorage.setItem("token", newToken);
+    localStorage.removeItem("perfilActivo"); // ✅ importante
     setToken(newToken);
+    setPerfilActivo(null);
   };
 
   /**
-   * Selecciona un perfil activo.
-   *
-   * - Guarda el nuevo token asociado al perfil.
-   * - Guarda el perfil activo en localStorage.
-   * - Actualiza el estado global de la aplicación.
+   * Seleccionar perfil activo
    */
-  const seleccionarPerfil = (newToken: string, perfil: PerfilActivo, index: number) => {
-    const perfilConIndex = { ...perfil, index };
+  const seleccionarPerfil = (
+    newToken: string,
+    perfil: Omit<PerfilActivo, "index">,
+    index: number
+  ) => {
+    const perfilConIndex: PerfilActivo = { ...perfil, index };
+
     localStorage.setItem("token", newToken);
     localStorage.setItem("perfilActivo", JSON.stringify(perfilConIndex));
+
     setToken(newToken);
     setPerfilActivo(perfilConIndex);
   };
+
   /**
-   * Cierra la sesión completamente.
-   *
-   * - Elimina token y perfil activo.
-   * - Limpia localStorage.
-   * - Resetea el estado global.
+   * Actualizar solo la información del perfil activo (ej: nombre o avatar)
+   * sin cambiar el token ni el índice.
+   */ 
+  const actualizarPerfilActivo = (
+    perfilActualizado: Omit<PerfilActivo, "index">
+  ) => {
+    setPerfilActivo(prev => {
+      if (!prev) return prev;
+
+      const actualizado: PerfilActivo = {
+        ...perfilActualizado,
+        index: prev.index
+      };
+
+      localStorage.setItem("perfilActivo", JSON.stringify(actualizado));
+      return actualizado;
+    });
+  };
+
+  /**
+   * Limpiar solo el perfil (cambio de perfil)
+   */
+  const limpiarPerfil = () => {
+    localStorage.removeItem("perfilActivo");
+    setPerfilActivo(null);
+  };
+
+  /**
+   * Logout completo
    */
   const logout = () => {
     localStorage.removeItem("token");
@@ -114,38 +113,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setPerfilActivo(null);
   };
 
-  /**
-   * Limpia el perfil activo sin cerrar la sesión.
-   *
-   * - Elimina el perfil activo de localStorage.
-   * - Resetea el estado global.
-   */
-  const limpiarPerfil = () => {
-    localStorage.removeItem("perfilActivo");
-    setPerfilActivo(null);
-  };
-
   return (
-    <AuthContext.Provider value={{
-      token,
-      perfilActivo,
-      isReady,
-      login,
-      seleccionarPerfil,
-      limpiarPerfil,
-      logout
-    }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        perfilActivo,
+        isReady,
+        login,
+        seleccionarPerfil,
+        limpiarPerfil,
+        logout,
+        actualizarPerfilActivo
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-/**
- * Hook personalizado para acceder al AuthContext.
- *
- * - Garantiza que se use dentro de AuthProvider.
- * - Simplifica el acceso al estado de autenticación.
- */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

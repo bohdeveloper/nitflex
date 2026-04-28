@@ -123,9 +123,9 @@ const Plantilla: React.FC = () => {
               className="boton-lateral w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {perfilActivo.avatar ? (
+              {perfilActivo.avatar ? (              
                 <img
-                  src={`http://localhost:5000${perfilActivo.avatar}`}
+                  src={`http://localhost:5000${perfilActivo.avatar}?t=${Date.now()}`}
                   alt="Perfil activo"
                   className="rounded-full object-cover"
                 />
