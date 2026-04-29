@@ -1,6 +1,5 @@
 import React from "react";
 import Pelicula from "../Pelicula";
-import './Peliculas.css';
 
 const Peliculas: React.FC = () => {
   return (

@@ -1,6 +1,5 @@
 import React from "react";
 import Serie from "../Serie";
-import './Series.css';
 
 const Series: React.FC = () => {
   return (

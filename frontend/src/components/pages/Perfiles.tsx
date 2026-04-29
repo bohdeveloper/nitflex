@@ -199,7 +199,7 @@ export default function Perfiles({ onCloseMenu }: PerfilesProps) {
         prev.map((p, i) => (i === perfilEditando ? data : p))
       );
 
-      // ✅ SI el perfil editado es el activo, sincronizar contexto
+      // SI el perfil editado es el activo, sincronizar contexto
       if (perfilActivo && perfilActivo.index === perfilEditando) {
         actualizarPerfilActivo(data);
       }

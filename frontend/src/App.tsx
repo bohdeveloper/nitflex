@@ -1,5 +1,4 @@
 import Plantilla from './components/layout/Plantilla';
-import './App.css';
 
 /**
  * Componente raíz de la aplicación.

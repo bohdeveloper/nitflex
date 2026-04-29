@@ -1,7 +1,6 @@
 import { useState } from "react"; "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import "./Registro.css";
 
 /**
  * Tipo que define los errores del formulario.
