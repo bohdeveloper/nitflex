@@ -15,14 +15,14 @@
 # ✅Seleccionar un perfil de usuario
 # ✅Configurar nav para mostrar Peliculas y Series solo cuando se acceda a un perfil
 # ✅Poner imagen de perfil en el botón sidebar al seleccionar el perfil
-# Controlar subidas de imagenes en uploads/avatars para que no se acumulen
+# ✅Controlar subidas de imagenes en uploads/avatars para que no se acumulen
 
-# Configurar acceso a API TMDB (api key en variables de entorno)
-# Crear servicio TMDB en backend (tmdb.service.ts)
+# ✅Configurar acceso a API TMDB (api key en variables de entorno)
+# ✅Crear servicio TMDB en backend (tmdb.service.ts)
 
 ## Endpoints backend de películas:
-# - Obtener tendencias (trending)
-# - Obtener películas populares
+# - ✅Obtener tendencias (trending)
+# - ✅Obtener películas populares
 # - Obtener películas por género
 # - Obtener detalle de película por ID
 

@@ -71,8 +71,17 @@ const Plantilla: React.FC = () => {
             className="content flex flex-col items-center min-h-[calc(90vh-90px)]"
           >
             <Routes>
-              {/* Públicas */}
-              <Route path="/" element={<Inicio />} />
+              {/* Públicas */}              
+              <Route
+                path="/"
+                element={
+                  token
+                    ? perfilActivo
+                      ? <Home />
+                      : <Perfiles />
+                    : <Inicio />
+                }
+              />
               <Route path="/inicio" element={<Inicio />} />
               <Route path="/login" element={<Login />} />
               <Route path="/Registro" element={<Registro />} />

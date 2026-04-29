@@ -1,25 +1,27 @@
 import React from "react";
-import { NavLink } from 'react-router-dom';
-import { useAuth } from "../../context/AuthContext";
+import { useHomeContent } from "../../hooks/useHomeContent";
+import Row from "../Row";
 
 const Inicio: React.FC = () => {
-    const { perfilActivo } = useAuth();
+    const { data, loading } = useHomeContent();
+
+    if (loading) {
+      return <p className="text-white mt-20">Cargando contenido...</p>;
+    }
+
 return (
-    <>    
-      <div className="items-center mt-20 max-w-[120vh] min-h-[50vh] text-center">
-        <h1 className="text-start font-bold text-8xl max-w-[60vh]">
-           {perfilActivo && <p>Hola, {perfilActivo.nombrePerfil}</p>}
-        </h1>
+    <div className="w-full px-10">
+      <h2 className="text-white text-2xl mb-2">Tendencias</h2>
+      <Row items={data.trending} />
 
-        <h2 className="font-bold text-3xl mt-4 pb-2 text-start">
-          Que deseas hacer:
-        </h2>
+      <h2 className="text-white text-2xl mt-6 mb-2">Películas populares</h2>
+      <Row items={data.movies} />
 
-        <p className="text-start"><NavLink className="text-red-800 hover:text-red-600 text-5xl" to="/series"> Ver Series</NavLink></p>
-        <p className="text-start"><NavLink className="text-red-800 hover:text-red-600 text-5xl" to="/peliculas"> Ver Películas</NavLink></p>                              
-      </div>      
-    </>
+      <h2 className="text-white text-2xl mt-6 mb-2">Series populares</h2>
+      <Row items={data.series} />
+    </div>
   );
+
 };
 
 export default Inicio;

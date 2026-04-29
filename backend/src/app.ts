@@ -1,12 +1,9 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import perfilesRoutes from "./routes/perfiles.routes";
+import tmdbRoutes from "./routes/tmdb.routes";
 import path from "path";
-
-// Cargar las variables de entorno desde el archivo .env
-dotenv.config();
 
 // Crear la aplicación Express
 export const app = express();
@@ -30,6 +27,9 @@ app.use("/auth", authRoutes);
 
 // Rutas de gestión de perfiles (crear, editar, eliminar, seleccionar)
 app.use("/perfiles", perfilesRoutes);
+
+// Rutas de integración con TMDB (trending, populares)
+app.use("/tmdb", tmdbRoutes);
 
 /**
  * Servir archivos estáticos

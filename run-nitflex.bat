@@ -82,6 +82,15 @@ if not exist "%BACKEND_DIR%\node_modules\multer" (
 )
 echo.
 
+if not exist "%BACKEND_DIR%\node_modules\axios" (
+    echo Instalando axios...
+    cd /d "%BACKEND_DIR%"
+    call npm install axios --save
+) else (
+    echo Axios OK.
+)
+echo.
+
 :: ------------------------------------------------------------
 :: INICIAR NITFLEX (npm run dev en el root)
 :: ------------------------------------------------------------
